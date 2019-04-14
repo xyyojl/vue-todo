@@ -20,6 +20,16 @@
 				})
 				this.title = ''
 			}
+		},
+		computed:{ // 放在computed中最后也会放在vm上，不能和methods与data重名
+			checkAll:{
+				get(){ // get和set this只想实例 默认v-model 会获取checkAll的值 所以会调用get方法
+					return this.todos.every(item=>item.isSelected);
+				},
+				set(val){ // 当我们给checkbox赋值的时候
+					this.todos.forEach(item=>item.isSelected = val);
+				}
+			}
 		}
 	})
 

@@ -17,11 +17,12 @@
 			</header>
 			<!-- This section should be hidden by default and shown when there are todos -->
 			<section class="main">
-				<input id="toggle-all" class="toggle-all" type="checkbox">
+				<input id="toggle-all" class="toggle-all" type="checkbox" 
+				v-model="checkAll" :class={checkAll:checkAll}>
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list">
 					<!-- completed editing -->
-					<li v-for="(todo,index) in todos">
+					<li v-for="(todo,index) in todos" :class="{completed:todo.isSelected}">
 						<div class="view">
 							<input class="toggle" type="checkbox" v-model="todo.isSelected">
 							<label>{{todo.title}}</label>
