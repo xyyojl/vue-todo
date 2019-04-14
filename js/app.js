@@ -48,6 +48,10 @@
 				set(val){ // 当我们给checkbox赋值的时候
 					this.todos.forEach(item=>item.isSelected = val);
 				}
+			},
+			count(){
+				console.log(this.todos.filter(item=>!item.isSelected).length)
+				return this.todos.filter(item=>!item.isSelected).length;
 			}
 		}
 	})
