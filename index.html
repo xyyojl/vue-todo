@@ -23,7 +23,7 @@
 				<ul class="todo-list">
 					<!-- completed editing -->
 					<li v-for="(todo,index) in filterTodos" :class="{completed:todo.isSelected,editing:cur===todo}" 
-					@dblclick="remember(todo)">
+					@dblclick="remember(todo)" :key="todo.id">
 						<div class="view">
 							<input class="toggle" type="checkbox" v-model="todo.isSelected">
 							<label>{{todo.title}}</label>

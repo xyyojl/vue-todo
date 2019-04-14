@@ -1,6 +1,19 @@
 (function (window) {
 	'use strict';
-
+	
+	let todoStorage = {
+		fetch: function () {
+			var todos = JSON.parse(localStorage.getItem('todos') || '[]');
+			todos.forEach(function (todo, index) {
+				todo.id = index;
+			});
+			todoStorage.uid = todos.length;
+			return todos
+		},
+		save: function (todos) {
+			localStorage.setItem('todos', JSON.stringify(todos));
+		}
+	};
 	let vm = new Vue({
 		el:'#todoapp',
 		directives:{
@@ -12,9 +25,6 @@
 			}
 		},
 		created(){
-			// 获取localStorage中的数据 没有则使用默认的
-			this.todos = JSON.parse(localStorage.getItem('todos')) || this.todos;
-
 			// 监控hash的值的变化,如果页面以及有hash了 重新刷新页面也要获取hash值
 			this.hash = window.location.hash.slice(2) || 'all';
 
@@ -25,18 +35,14 @@
 		},
 		watch:{
 			todos:{ // watch 默认只监控一层的数据变化，深度监控
-				handler(){ // 默认 写成函数 就相当于默认写了个handler
+				handler(todos){ // 默认 写成函数 就相当于默认写了个handler
 					// localStorage 默认存的是字符串
-					localStorage.setItem('todos',JSON.stringify(this.todos));
+					todoStorage.save(todos)
 				},deep:true
 			}
 		},
 		data:{
-			todos:[
-				{isSelected:false,title:'吃饭'},
-				{isSelected:true,title:'睡觉'},
-				{isSelected:false,title:'购物'},
-			],
+			todos: todoStorage.fetch(),
 			title:'',
 			cur:'',
 			hash:''
@@ -45,13 +51,13 @@
 			addTodo(){
 				if(!this.title) return;
 				this.todos.unshift({
+					id: todoStorage.uid++, 
 					isSelected : false,
 					title : this.title
 				})
 				this.title = ''
 			},
 			removeTodo(todo){
-				console.log(1);
 				this.todos = this.todos.filter(item=>item!==todo);
 			},
 			remember(todo){
@@ -66,7 +72,7 @@
 		},
 		computed:{ // 放在computed中最后也会放在vm上，不能和methods与data重名
 			checkAll:{
-				get(){ // get和set this只想实例 默认v-model 会获取checkAll的值 所以会调用get方法
+				get(){ // get和set this指向实例 默认v-model 会获取checkAll的值 所以会调用get方法
 					return this.todos.every(item=>item.isSelected);
 				},
 				set(val){ // 当我们给checkbox赋值的时候
@@ -74,7 +80,6 @@
 				}
 			},
 			count(){
-				console.log(this.todos.filter(item=>!item.isSelected).length)
 				return this.todos.filter(item=>!item.isSelected).length;
 			},
 			filterTodos(){
