@@ -22,7 +22,7 @@
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list">
 					<!-- completed editing -->
-					<li v-for="(todo,index) in todos" :class="{completed:todo.isSelected,editing:cur===todo}" 
+					<li v-for="(todo,index) in filterTodos" :class="{completed:todo.isSelected,editing:cur===todo}" 
 					@dblclick="remember(todo)">
 						<div class="view">
 							<input class="toggle" type="checkbox" v-model="todo.isSelected">
@@ -39,17 +39,17 @@
 				<span class="todo-count"><strong>{{count}}</strong> item left</span>
 				<ul class="filters">
 					<li>
-						<a class="selected" href="#/">All</a>
+						<a :class="{selected:this.hash === 'all'}" href="#/all">All</a>
 					</li>
 					<li>
-						<a href="#/active">Active</a>
+						<a :class="{selected:this.hash === 'active'}" href="#/active">Active</a>
 					</li>
 					<li>
-						<a href="#/completed">Completed</a>
+						<a :class="{selected:this.hash === 'completed'}" href="#/completed">Completed</a>
 					</li>
 				</ul>
 				<!-- Hidden if no completed items are left ↓ -->
-				<button class="clear-completed">Clear completed</button>
+				<button class="clear-completed" v-show="clearCompleted" @click="clear">Clear completed</button>
 			</footer>
 		</section>
 		<script src="./js/vue.min.js"></script>
