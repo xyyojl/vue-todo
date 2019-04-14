@@ -13,7 +13,7 @@
 			<header class="header">
 				<h1>todos</h1>
 				<input class="new-todo" placeholder="What needs to be done?" autofocus 
-				v-model="title" @keyup.enter="addTodo">
+				v-model.trim="title" @keyup.enter="addTodo">
 			</header>
 			<!-- This section should be hidden by default and shown when there are todos -->
 			<section class="main">
@@ -22,13 +22,15 @@
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list">
 					<!-- completed editing -->
-					<li v-for="(todo,index) in todos" :class="{completed:todo.isSelected}">
+					<li v-for="(todo,index) in todos" :class="{completed:todo.isSelected,editing:cur===todo}" 
+					@dblclick="remember(todo)">
 						<div class="view">
 							<input class="toggle" type="checkbox" v-model="todo.isSelected">
 							<label>{{todo.title}}</label>
-							<button class="destroy"></button>
+							<button class="destroy" @click="removeTodo(todo)"></button>
 						</div>
-						<input class="edit" value="Rule the web">
+						<input class="edit" v-model="todo.title" 
+						@keyup.enter="cancel" @blur="cancel" v-focus="cur===todo">
 					</li>
 				</ul>
 			</section>
