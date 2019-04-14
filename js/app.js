@@ -73,13 +73,15 @@
 		computed:{ // 放在computed中最后也会放在vm上，不能和methods与data重名
 			checkAll:{
 				get(){ // get和set this指向实例 默认v-model 会获取checkAll的值 所以会调用get方法
-					return this.todos.every(item=>item.isSelected);
+					let result = this.todos.length?this.todos.every(item=>item.isSelected):null;
+					console.log(result);
+					return result;
 				},
 				set(val){ // 当我们给checkbox赋值的时候
 					this.todos.forEach(item=>item.isSelected = val);
 				}
 			},
-			count(){
+			UnCompletedCount(){
 				return this.todos.filter(item=>!item.isSelected).length;
 			},
 			filterTodos(){
@@ -90,6 +92,9 @@
 			},
 			clearCompleted(){
 				return this.todos.some(item=>item.isSelected);
+			},
+			count(){
+				return this.todos.length;
 			}
 		}
 	})

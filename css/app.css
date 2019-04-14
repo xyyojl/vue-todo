@@ -1,3 +1,6 @@
 .toggle-all.checkAll:checked + label:before {
 	color: #737373;
 }
+[v-cloak]{
+    display: none;
+}
